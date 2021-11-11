@@ -9,12 +9,17 @@
   import dogs from '$lib/dogs.jpg'
   import kittens from '$lib/kittens.jpeg'
 
+  const MODEL_OPTIONS:{display: string, value: cocoSsd.ObjectDetectionBaseModel }[] = [
+    { display: "SSD Lite Mobilenet V2", value: 'lite_mobilenet_v2' },
+    { display: "SSD Mobilenet V2", value: 'mobilenet_v2' },
+    { display: "SSD Mobilenet V1", value: 'mobilenet_v1' },
+  ]
+
   let canvas: HTMLCanvasElement
   let canvasContainerWidth: number = 600
   let ctx: CanvasRenderingContext2D
   let DPR = 1
   let files: FileList
-  let height: number = 400
   let images:string[] = [
     beach,
     dogs,
@@ -31,55 +36,54 @@
   let state:string = "loading"
   let targetImage: HTMLImageElement
   let targetImageIndex: number = 0
-  let width:number = 600
+
+  //prep the selected model to be loaded
+  const getModelPromise = (base:cocoSsd.ObjectDetectionBaseModel = "lite_mobilenet_v2") => cocoSsd.load({base})
 
   onMount(async () => {
-    //DPR is important for improving the picture quality of the canvas, especially for text
-    //based off this fiddle http://jsfiddle.net/65maD/83/ from this stack answer https://stackoverflow.com/a/54027313
     DPR = window.devicePixelRatio
-    
     ctx = canvas.getContext('2d')
 
-    modelPromise = cocoSsd.load()
+    modelPromise = getModelPromise()
     await run()
     state = "loaded"
   })
 
-  const onChange = async (event) => {
-    state = "loading"
-    const model = await modelPromise
-    model.dispose()
-    modelPromise = cocoSsd.load(
-      {base: event.srcElement.options[event.srcElement.selectedIndex].value}
-    )
-    await run()
+  const onChange = async (e) => {
+    state = "loading";
+    (await modelPromise).dispose() //dispose of the old model
+    modelPromise = getModelPromise(e.target.value)
+    await run() //run the new model on the target image
   }
 
   const changeImage = async (i: number) => {
-    targetImageIndex = i
-    await run()
+    targetImageIndex = i //change the target image
+    await run() //run the model on the new image
   }
 
   const run = async () => {
     state = "loading"
 
     const model = await modelPromise //save models as static JSON?
-    const start = Date.now()
-    results = await model.detect(targetImage)
-    predictionTime = Date.now() - start
+    const start = Date.now() //record the start time
+    results = await model.detect(targetImage) //run the model on the image
+    predictionTime = Date.now() - start //record the time elapsed
 
     state = "loaded"
   }
 
   afterUpdate(() => {
+    //DPR is important for improving the picture quality of the canvas, especially for text
+    //based off this fiddle http://jsfiddle.net/65maD/83/ from this stack answer https://stackoverflow.com/a/54027313
+    //set the canvas size to the image size scaled by DPR
     canvas.height = targetImage.height * DPR
     canvas.width = targetImage.width * DPR
 
-    ctx.scale(DPR, DPR)
-    ctx.drawImage(targetImage, 0, 0)
+    ctx.scale(DPR, DPR) //set the new scale via DPR 
+    ctx.drawImage(targetImage, 0, 0) //draw the target image
     ctx.font = '10px Arial'
 
-    results.forEach((r,i) => {
+    results.forEach((r,i) => { //draw each result
       const isHovering = resultHoverIndex === i
 
       ctx.beginPath()
@@ -123,9 +127,9 @@
     <h3>Select a Model</h3>
     <div>
       <select id='base_model' on:change={onChange}>
-        <option value="lite_mobilenet_v2">SSD Lite Mobilenet V2</option>
-        <option value="mobilenet_v1">SSD Mobilenet v1</option>
-        <option value="mobilenet_v2">SSD Mobilenet v2</option>
+        {#each MODEL_OPTIONS as o}
+          <option value={o.value}>{o.display}</option>
+        {/each}
       </select>
     </div>
 
