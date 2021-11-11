@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<title>Home</title>
+
+		
+
+		<link rel="modulepreload" href="/tfjs-test/_app/start-702b7a6e.js">
+		<link rel="modulepreload" href="/tfjs-test/_app/chunks/vendor-a0a436af.js">
+		<link rel="modulepreload" href="/tfjs-test/_app/pages/__layout.svelte-4fe8e80d.js">
+		<link rel="modulepreload" href="/tfjs-test/_app/chunks/Blanchor-7de40104.js">
+		<link rel="modulepreload" href="/tfjs-test/_app/pages/index.svelte-a5b73640.js">
+		<link rel="stylesheet" href="/tfjs-test/_app/assets/start-61d1577b.css">
+		<link rel="stylesheet" href="/tfjs-test/_app/assets/vendor-ec9510ad.css">
+		<link rel="stylesheet" href="/tfjs-test/_app/assets/pages/__layout.svelte-b07cf12f.css">
+		<link rel="stylesheet" href="/tfjs-test/_app/assets/pages/index.svelte-f9972197.css">
+
+		<script type="module">
+			import { start } from "/tfjs-test/_app/start-702b7a6e.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"/tfjs-test","assets":""},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/tfjs-test/_app/pages/__layout.svelte-4fe8e80d.js"),
+						import("/tfjs-test/_app/pages/index.svelte-a5b73640.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "\u002F",
+						query: new URLSearchParams(""),
+						params: {}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+<main>
+
+<header class="svelte-1j7lxe4"><div><h1>TensorFlow.js</h1>
+
+    <div><i>In-Browser Object Detection with SSD Mobilenet</i></div>
+
+    <br>
+
+    <div style="font-size:2em"><a href="https://github.com/harryli0088/tfjs-test" target="_blank" rel="noopener noreferrer"><svg id="" class="icon-button fa svelte-1cj2gr0" style="height:1em;vertical-align:-.125em;transform-origin:center;overflow:visible;color:white;" viewBox="0 0 496 512" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg"><g transform="translate(248 256)" transform-origin="124 0"><g transform="translate(0,0) scale(1,1)"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z" fill="currentColor" transform="translate(-248 -256)"></path></g></g></svg></a></div></div></header>
+
+<section><div style="position: relative"><div><label for="base-model" style="display:inline-block;"><h3>Select a Model:</h3></label>
+
+      <select id="base-model"><option value="lite_mobilenet_v2">SSD Lite Mobilenet V2</option><option value="mobilenet_v2">SSD Mobilenet V2</option><option value="mobilenet_v1">SSD Mobilenet V1</option></select></div>
+
+    <div><h3>Select an Image to Analyze:</h3>
+
+      <div id="carousel-container" class="svelte-1j7lxe4"><div id="carousel" class="svelte-1j7lxe4"><img alt="analyze option" class="image-option focused svelte-1j7lxe4" src="/tfjs-test/_app/assets/beach-1cce24f1.jpg"><img alt="analyze option" class="image-option  svelte-1j7lxe4" src="/tfjs-test/_app/assets/dogs-7a39fd04.jpg"><img alt="analyze option" class="image-option  svelte-1j7lxe4" src="/tfjs-test/_app/assets/kittens-6dbc1477.jpeg"><img alt="analyze option" class="image-option  svelte-1j7lxe4" src="/tfjs-test/_app/assets/food-fa9167d1.jpeg"></div></div>
+
+      <div style="margin-top: 0.5em;text-align:right;"><label id="upload-images-button" class="label-button svelte-1j7lxe4" for="upload-images">Upload Your Own Image
+            <svg id="" class="fa svelte-1cj2gr0" style="height:1em;vertical-align:-.125em;transform-origin:center;overflow:visible" viewBox="0 0 512 512" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg"><g transform="translate(256 256)" transform-origin="128 0"><g transform="translate(0,0) scale(1,1)"><path d="M464 448H48c-26.51 0-48-21.49-48-48V112c0-26.51 21.49-48 48-48h416c26.51 0 48 21.49 48 48v288c0 26.51-21.49 48-48 48zM112 120c-30.928 0-56 25.072-56 56s25.072 56 56 56 56-25.072 56-56-25.072-56-56-56zM64 384h384V272l-87.515-87.515c-4.686-4.686-12.284-4.686-16.971 0L208 320l-55.515-55.515c-4.686-4.686-12.284-4.686-16.971 0L64 336v48z" fill="currentColor" transform="translate(-256 -256)"></path></g></g></svg></label>
+        <input type="file" id="upload-images" multiple accept="image/*" class="svelte-1j7lxe4"></div></div>
+
+    <h3>Analyzed Image</h3>
+
+    <div><img alt="input" id="target-image" src="/tfjs-test/_app/assets/beach-1cce24f1.jpg" class="svelte-1j7lxe4"></div>
+
+    <div><canvas id="canvas" style="width:600px;" class="svelte-1j7lxe4"></canvas></div>
+
+    <br>
+
+    <div><b>Prediction Time:</b> 0ms</div>
+
+    <br>
+
+    <div style="overflow-x:auto;"><div><b>The model did not detect any objects</b></div></div>
+
+    <div id="loading-dimmer" class="svelte-1j7lxe4">Loading Model...</div></div></section>
+
+<section><hr></section>
+
+<section><h2>Background</h2>
+
+  <p>I made this website based off the <a href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd" target="_blank" rel="noopener noreferrer">Tensorflow.js COCO-SSD demo</a>. The model is ported into Tensorflow.js and runs <i>completely</i> in your browser with no backend server component, pretty cool!</p>
+
+  <h3>Why does the model [suck in some way]?</h3>
+  <p>As with all machine learning models, the model is only as good as the data you give it. This model was trained on the COCO dataset and will not perform as well on images that look different. Hilariously, SSD Lite Mobilenet V2 thinks the food image is a <span class="fake-anchor svelte-1j7lxe4">refrigerator</span>.</p>
+
+  <h3>COCO-SSD</h3>
+  <p>COCO-SSD is an object detection model trained on the <a href="https://cocodataset.org/#home" target="_blank" rel="noopener noreferrer">Common Objects in Context</a> (aka COCO) dataset. SSD stands for Single Shot MultiBox Detection
+  which generates default boxes over different aspect ratios and scales, adjusts boxes during prediction time, and can combine predictions from multiple feature maps to handle various object sizes. SSD encapsulates all computation in a single Feed-Forward Convolutional Neural Network which eliminates proposal generation and resampling, making it easier to train and operationalize (<a href="https://arxiv.org/abs/1512.02325" target="_blank" rel="noopener noreferrer">full paper</a>).</p>
+
+  <h3>Tensorflow? JavaScript? Is this for real??</h3>
+  <p>I could hardly believe it myself, which is why I made this test website. I guess there is no running away from JavaScript.</p>
+  <p>Quoted from <a href="https://www.tensorflow.org/js/guide/platform_environment" target="_blank" rel="noopener noreferrer">the docs</a>: &quot;TensorFlow.js executes operations on the GPU by running WebGL shader programs. These shaders are assembled and compiled lazily when the user asks to execute an operation&quot;.</p>
+  <p>Say what you will about JavaScript; it&#39;s powerful enough to run client-side ML! (Some people even claim that you could do all the training in JS...but I haven&#39;t gotten there yet)</p>
+
+  <h3>Advantages of client-side Machine Learning</h3>
+  <p>Running ML models in a browser or even in a React Native mobile app can greatly simplify the application architecture. Instead of building a beefy server that can handle many prediction requests, you can simply cache the model in a Content Delivery Network and make the user&#39;s device do all the work for you!</p>
+
+  <p>Of course, one of the downsides of client-side ML is that your model is published for everyone to see, not good if you have some secret sauce. Also, extremely large models could eat up network bandwidth and a user&#39;s processing power, and not all client devices have GPU hardware.</p>
+</section></main>
+
+<footer class="svelte-1tumlcc"><p>Built using <a href="https://kit.svelte.dev/" target="_blank" rel="noopener noreferrer">Svelte Kit</a> and <a href="https://www.typescriptlang.org/" target="_blank" rel="noopener noreferrer">TypeScript</a></p>
+  <p>Based off the <a href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd/demo" target="_blank" rel="noopener noreferrer">Tensorflow.js COCO-SSD demo</a></p>
+  <p>Github Repo: <a href="https://github.com/harryli0088/tfjs-test" target="_blank" rel="noopener noreferrer">https://github.com/harryli0088/tfjs-test</a></p>
+  <p>Default Images from the <a href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd/demo" target="_blank" rel="noopener noreferrer">Tensorflow.js COCO-SSD demo</a>, <a href="https://www.americanhumane.org/initiative/adopt-a-cat-month/" target="_blank" rel="noopener noreferrer">American Humane</a>, and <a href="https://www.dreamstime.com/missbobbit_info" target="_blank" rel="noopener noreferrer">Missbobbit</a></p>
+  <p>Icons provided by Font Awesome: <a href="https://fontawesome.com/license" target="_blank" rel="noopener noreferrer">https://fontawesome.com/license</a></p>
+</footer>
+
+
+
+			
+		</div>
+	</body>
+</html>
