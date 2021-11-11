@@ -14,6 +14,7 @@
   let ctx: CanvasRenderingContext2D
   let DPR = 1
   let files: FileList
+  let height: number = 400
   let images:string[] = [
     beach,
     dogs,
@@ -30,6 +31,7 @@
   let state:string = "loading"
   let targetImage: HTMLImageElement
   let targetImageIndex: number = 0
+  let width:number = 600
 
   onMount(async () => {
     //DPR is important for improving the picture quality of the canvas, especially for text
@@ -37,7 +39,6 @@
     DPR = window.devicePixelRatio
     
     ctx = canvas.getContext('2d')
-    ctx.scale(DPR, DPR)
 
     modelPromise = cocoSsd.load()
     await run()
@@ -56,13 +57,12 @@
 
   const changeImage = async (i: number) => {
     targetImageIndex = i
-    targetImage = targetImage
     await run()
   }
 
   const run = async () => {
     state = "loading"
-    
+
     const model = await modelPromise //save models as static JSON?
     const start = Date.now()
     results = await model.detect(targetImage)
@@ -71,10 +71,11 @@
     state = "loaded"
   }
 
-  $: height = targetImage?.height || 600
-  $: width = targetImage?.width || 400
-
   afterUpdate(() => {
+    canvas.height = targetImage.height * DPR
+    canvas.width = targetImage.width * DPR
+
+    ctx.scale(DPR, DPR)
     ctx.drawImage(targetImage, 0, 0)
     ctx.font = '10px Arial'
 
@@ -164,8 +165,7 @@
       <canvas
         bind:this={canvas}
         id="canvas"
-        height={height}
-        width={width}
+        style={`width:${canvasContainerWidth}px;`}
       />
     </div>
 
@@ -253,7 +253,6 @@
 
   canvas {
     display: block;
-    width: 100%;
   }
 
   table {
