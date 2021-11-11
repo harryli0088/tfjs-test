@@ -77,19 +77,24 @@
     //DPR is important for improving the picture quality of the canvas, especially for text
     //based off this fiddle http://jsfiddle.net/65maD/83/ from this stack answer https://stackoverflow.com/a/54027313
     //set the canvas size to the image size scaled by DPR
+    //BUG: when you enter mobile mode in Chrome, the target image has 0 dimensions after the first click
     canvas.height = targetImage.height * DPR
     canvas.width = targetImage.width * DPR
-
     ctx.scale(DPR, DPR) //set the new scale via DPR 
+
+    //loosely scale the font size and line thickness with image size
+    const diag = Math.hypot(targetImage.height, targetImage.width)
+    const thicknessScale = Math.ceil(diag / 1000)
+
     ctx.drawImage(targetImage, 0, 0) //draw the target image
-    ctx.font = '10px Arial'
+    ctx.font = `${thicknessScale * 10}px Arial` //set the font
 
     results.forEach((r,i) => { //draw each result
       const isHovering = resultHoverIndex === i
 
       ctx.beginPath()
       ctx.rect(...r.bbox)
-      ctx.lineWidth = isHovering ? 3 : 1
+      ctx.lineWidth = isHovering ? 3*thicknessScale : thicknessScale
       ctx.strokeStyle = 'green'
       ctx.fillStyle = 'green'
       ctx.stroke()
@@ -136,10 +141,10 @@
 
 <section>
   <div style="position: relative">
-    <h3>Select a Model</h3>
-
     <div>
-      <select id='base_model' on:change={onChange}>
+      <label for="base-model" style="display:inline-block;"><h3>Select a Model:</h3></label>
+
+      <select id='base-model' on:change={onChange}>
         {#each MODEL_OPTIONS as o}
           <option value={o.value}>{o.display}</option>
         {/each}
@@ -147,16 +152,7 @@
     </div>
 
     <div>
-      <h3>Select an Image to Analyze</h3>
-      <div>
-        <label id="upload-images-button" class="label-button" for="upload-images">
-          Upload Your Own Image
-          &nbsp; <Fa icon={faImage}/>
-        </label>
-        <input type="file" id="upload-images" multiple accept="image/*" bind:files={files} on:change={uploadImages}>
-      </div>
-
-      <br/>
+      <h3>Select an Image to Analyze:</h3>
 
       <div id="carousel-container">
         <div id="carousel">
@@ -170,9 +166,17 @@
           {/each}
         </div>
       </div>
+
+      <div style="margin-top: 0.5em;text-align:right;">
+        <label id="upload-images-button" class="label-button" for="upload-images">
+          Upload Your Own Image
+          &nbsp; <Fa icon={faImage}/>
+        </label>
+        <input type="file" id="upload-images" multiple accept="image/*" bind:files={files} on:change={uploadImages}>
+      </div>
     </div>
 
-    <br/>
+    <h3>Analyzed Image</h3>
 
     <div>
       <img
@@ -197,7 +201,7 @@
 
     <br/>
 
-    <div>
+    <div style="overflow-x:auto;">
       {#if results.length > 0}
         <table>
           <thead>
@@ -295,6 +299,7 @@
     text-align: left;
     padding-left: 0.5em;
     padding-right: 0.5em;
+    white-space: nowrap;
   }
   th:first-child, td:first-child {
     padding-left: 0;
