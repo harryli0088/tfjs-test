@@ -62,11 +62,11 @@
 
   const run = async () => {
     state = "loading"
+    
     const model = await modelPromise //save models as static JSON?
     const start = Date.now()
     results = await model.detect(targetImage)
     predictionTime = Date.now() - start
-    console.timeEnd('prediction time')
 
     state = "loaded"
   }
@@ -128,9 +128,15 @@
       </select>
     </div>
 
-
     <div>
       <h3>Select an Image to Analyze</h3>
+      <div>
+        <label id="upload-images-button" class="label-button" for="upload-images">Upload Your Own Image</label>
+        <input type="file" id="upload-images" multiple accept="image/*" bind:files={files} on:change={uploadImages}>
+      </div>
+
+      <br/>
+
       <div id="carousel">
         {#each images as src,i}
           <img
@@ -140,11 +146,6 @@
             {src}
           />
         {/each}
-      </div>
-
-      <div>
-        <label class="label-button" for="upload-images">Upload Your Own Image</label>
-        <input type="file" id="upload-images" multiple accept="image/*" bind:files={files} on:change={uploadImages}>
       </div>
     </div>
 
@@ -220,6 +221,32 @@
     padding-bottom: 5em;
   }
 
+  #carousel {
+    display: flex;
+  }
+
+  .image-option {
+    cursor: pointer;
+    height: 100px;
+    border: 5px solid transparent;
+    transition: 0.25s;
+  }
+  .image-option.focused {
+    border-color: gold;
+  }
+  .image-option:hover {
+    transform: scale(1.05);
+  }
+
+  #upload-images-button {
+    background-color: orange;
+    color: white;
+  }
+
+  #upload-images {
+    display: none;
+  }
+
   #target-image {
     display: none;
   }
@@ -263,27 +290,5 @@
     justify-content: center;
     align-items: center;
     font-weight: bold;
-  }
-
-  #carousel {
-    display: flex;
-  }
-
-  .image-option {
-    cursor: pointer;
-    height: 100px;
-    margin-right: 10px;
-    border: 5px solid transparent;
-    transition: 0.25s;
-  }
-  .image-option:last-child {
-    margin-right: 0;
-  }
-  .image-option.focused {
-    border-color: gold;
-  }
-
-  #upload-images {
-    display: none;
   }
 </style>
