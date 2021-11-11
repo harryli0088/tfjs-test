@@ -131,7 +131,7 @@
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>TensorFlow.js - In-Browser Object Detection with SSD Mobilenet</title>
 </svelte:head>
 
 <header>
@@ -265,7 +265,7 @@
   which generates default boxes over different aspect ratios and scales, adjusts boxes during prediction time, and can combine predictions from multiple feature maps to handle various object sizes. SSD encapsulates all computation in a single Feed-Forward Convolutional Neural Network which eliminates proposal generation and resampling, making it easier to train and operationalize (<Blanchor href="https://arxiv.org/abs/1512.02325">full paper</Blanchor>).</p>
 
   <h3>Tensorflow? JavaScript? Is this for real??</h3>
-  <p>I could hardly believe it myself, which is why I made this test website. I guess there is no running away from JavaScript.</p>
+  <p>I could hardly believe it myself, which is why I made this test website. I guess there's no running away from JavaScript.</p>
   <p>Quoted from <Blanchor href="https://www.tensorflow.org/js/guide/platform_environment">the docs</Blanchor>: "TensorFlow.js executes operations on the GPU by running WebGL shader programs. These shaders are assembled and compiled lazily when the user asks to execute an operation".</p>
   <p>Say what you will about JavaScript; it's powerful enough to run client-side ML! (Some people even claim that you could do all the training in JS...but I haven't gotten there yet)</p>
 

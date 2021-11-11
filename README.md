@@ -4,6 +4,7 @@ In-Browser Object Detection with SSD Mobilenet
 
 https://harryli0088.github.io/tfjs-test/
 
+![Screenshot](static/screenshot.png)
 
 ## Deploying to Github Pages
 
@@ -37,7 +38,12 @@ export default config;
 
 3. Add an empty ```.nojekyll``` file in your ```static/``` directory, otherwise GitHub Pages will ignore files with a leading underscore (ie ```_app/```)
 
-4. Add a deploy script to ```package.json```
+4. Add a period in front of your favicon import in `src/app.html`
+```html
+<link rel="icon" href="./favicon.png" />
+```
+
+5. Add a deploy script to ```package.json```
 ```json
 {
   "scripts": {
@@ -46,7 +52,7 @@ export default config;
 }
 ```
 
-5. Run the deploy script
+6. Run the deploy script
 ```
 npm run deploy
 ```
