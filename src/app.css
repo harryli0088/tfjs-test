@@ -50,7 +50,7 @@ label {
 	display: block;
 }
 
-input, button, select, textarea {
+input, button, select, textarea, .label-button {
 	font-family: inherit;
 	font-size: inherit;
 	-webkit-padding: 0.4em 0;
@@ -65,7 +65,7 @@ input:disabled {
 	color: #ccc;
 }
 
-button {
+button, .label-button {
 	color: #333;
 	background-color: #f4f4f4;
 	outline: none;
@@ -74,12 +74,16 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+button:hover, .label-button:hover {
 	transform: scale(1.1);
 }
 
-button:active {
+button:active, .label-button:active {
 	transform: scale(0.9);
+}
+
+.label-button {
+  display: inline-block;
 }
 
 .icon-button {

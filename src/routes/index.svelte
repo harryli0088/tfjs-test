@@ -1,26 +1,24 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
+  import { afterUpdate } from 'svelte/internal'
   import '@tensorflow/tfjs-backend-cpu'
   import '@tensorflow/tfjs-backend-webgl'
-
   import * as cocoSsd from '@tensorflow-models/coco-ssd'
 
-  import imageURL from '$lib/image1.jpg'
-  import image2URL from '$lib/image2.jpg'
-  import { onMount } from 'svelte'
-  import { afterUpdate } from 'svelte/internal';
-
-  //DPR is important for improving the picture quality of the canvas, especially for text
-  //based off this fiddle http://jsfiddle.net/65maD/83/ from this stack answer https://stackoverflow.com/a/54027313
+  import beach from '$lib/beach.jpg'
+  import dogs from '$lib/dogs.jpg'
+  import kittens from '$lib/kittens.jpeg'
 
   let canvas: HTMLCanvasElement
   let canvasContainerWidth: number = 600
   let ctx: CanvasRenderingContext2D
   let DPR = 1
+  let files: FileList
   let images:string[] = [
-    imageURL,
-    image2URL
+    beach,
+    dogs,
+    kittens
   ]
-  let imageSrc: string = imageURL
   let modelPromise: Promise<any>
   let predictionTime: number = 0
   let resultHoverIndex: number = -1
@@ -31,8 +29,11 @@
   }[] = []
   let state:string = "loading"
   let targetImage: HTMLImageElement
+  let targetImageIndex: number = 0
 
   onMount(async () => {
+    //DPR is important for improving the picture quality of the canvas, especially for text
+    //based off this fiddle http://jsfiddle.net/65maD/83/ from this stack answer https://stackoverflow.com/a/54027313
     DPR = window.devicePixelRatio
     
     ctx = canvas.getContext('2d')
@@ -53,8 +54,9 @@
     await run()
   }
 
-  const changeImage = async (src: string) => {
-    imageSrc = src
+  const changeImage = async (i: number) => {
+    targetImageIndex = i
+    targetImage = targetImage
     await run()
   }
 
@@ -92,6 +94,19 @@
       )
     })
   })
+
+  const uploadImages = () => {
+    if(files) { //if there are files to read
+      for(let i=0; i<files.length; ++i) { //loop through the files
+        const file = files[i] //get the current file
+        const reader = new FileReader() //create a FileReader to read the file
+        reader.onload = () => { //on load callback
+          images = images.concat(reader.result as string) //add the image to the array
+        }
+        reader.readAsDataURL(file) //read the file
+      }
+    }
+  }
 </script>
 
 <svelte:head>
@@ -117,9 +132,19 @@
     <div>
       <h3>Select an Image to Analyze</h3>
       <div id="carousel">
-        {#each images as src}
-          <img class="image-option" {src} alt="analyze option" on:click={() => changeImage(src)}/>
+        {#each images as src,i}
+          <img
+            alt="analyze option"
+            class={`image-option ${(targetImageIndex===i ? "focused" : "")}`}
+            on:click={() => changeImage(i)}
+            {src}
+          />
         {/each}
+      </div>
+
+      <div>
+        <label class="label-button" for="upload-images">Upload Your Own Image</label>
+        <input type="file" id="upload-images" multiple accept="image/*" bind:files={files} on:change={uploadImages}>
       </div>
     </div>
 
@@ -130,7 +155,7 @@
         alt="input"
         bind:this={targetImage}
         id="target-image"
-        src={imageSrc}
+        src={images[targetImageIndex]}
       />
     </div>
 
@@ -154,11 +179,11 @@
         <thead>
           <tr>
             <th>Class</th>
-            <th>Score</th>
-            <th>Top Left X</th>
-            <th>Top Left Y</th>
-            <th>Width</th>
-            <th>Height</th>
+            <th>Confidence Score</th>
+            <th>Top Left X px</th>
+            <th>Top Left Y px</th>
+            <th>Width px</th>
+            <th>Height px</th>
           </tr>
         </thead>
 
@@ -178,7 +203,7 @@
     </div>
 
     {#if state === "loading"}
-      <div id="loading-dimmer">Loading...</div>
+      <div id="loading-dimmer">Loading Model...</div>
     {/if}
   </div>
 </section>
@@ -233,7 +258,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(230,230,230,0.7);
+    background-color: rgba(240,240,240,0.9);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -248,8 +273,17 @@
     cursor: pointer;
     height: 100px;
     margin-right: 10px;
+    border: 5px solid transparent;
+    transition: 0.25s;
   }
   .image-option:last-child {
     margin-right: 0;
+  }
+  .image-option.focused {
+    border-color: gold;
+  }
+
+  #upload-images {
+    display: none;
   }
 </style>
