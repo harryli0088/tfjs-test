@@ -4,6 +4,7 @@
   import '@tensorflow/tfjs-backend-cpu'
   import '@tensorflow/tfjs-backend-webgl'
   import * as cocoSsd from '@tensorflow-models/coco-ssd'
+  import { CLASSES } from '@tensorflow-models/coco-ssd/dist/classes'
   import Fa from 'svelte-fa'
   import { faGithub } from '@fortawesome/free-brands-svg-icons'
   import { faImage } from '@fortawesome/free-solid-svg-icons'
@@ -12,7 +13,7 @@
   import dogs from '$lib/dogs.jpg'
   import food from '$lib/food.jpeg'
   import kittens from '$lib/kittens.jpeg'
-  import Blanchor from '$lib/Blanchor.svelte';
+  import Blanchor from '$lib/Blanchor.svelte'
 
   //all the available ObjectDetectionBaseModel options from node_modules/@tensorflow-models/coco-ssd/dist/index.d.ts
   const MODEL_OPTIONS:{display: string, value: cocoSsd.ObjectDetectionBaseModel }[] = [
@@ -128,6 +129,9 @@
     await changeModel("lite_mobilenet_v2", false)
     await changeTargetImage(3)
   }
+
+  const sortedClasses = Object.values(CLASSES).map(c => c.displayName).sort()
+  const CLASS_SLICES = [0,20,40,60]
 </script>
 
 <svelte:head>
@@ -212,7 +216,7 @@
 
     <br/>
 
-    <div style="overflow-x:auto;">
+    <div id="table-container" style="overflow-x:auto;">
       {#if results.length > 0}
         <table>
           <thead>
@@ -258,11 +262,26 @@
   <p>I made this website based off the <Blanchor href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd">Tensorflow.js COCO-SSD demo</Blanchor>. The model is ported into Tensorflow.js and runs <i>completely</i> in your browser with no backend server component, pretty cool!</p>
 
   <h3>Why does the model [suck in some way]?</h3>
-  <p>As with all machine learning models, the model is only as good as the data you give it. This model was trained on the COCO dataset and will not perform as well on images that look different. Hilariously, SSD Lite Mobilenet V2 thinks the food image is a <span class="fake-anchor" on:click={() => setRefrigerator()}>refrigerator</span>.</p>
+  <p>As with all machine learning models, the model is only as good as the data you give it. This model was trained on the COCO dataset and will not perform as well on images that look different. Hilariously, SSD Lite Mobilenet V2 thinks the food image is a <a href="#carousel" on:click={() => setRefrigerator()}>refrigerator</a>.</p>
 
   <h3>COCO-SSD</h3>
   <p>COCO-SSD is an object detection model trained on the <Blanchor href="https://cocodataset.org/#home">Common Objects in Context</Blanchor> (aka COCO) dataset. SSD stands for Single Shot MultiBox Detection
   which generates default boxes over different aspect ratios and scales, adjusts boxes during prediction time, and can combine predictions from multiple feature maps to handle various object sizes. SSD encapsulates all computation in a single Feed-Forward Convolutional Neural Network which eliminates proposal generation and resampling, making it easier to train and operationalize (<Blanchor href="https://arxiv.org/abs/1512.02325">full paper</Blanchor>).</p>
+
+
+  <p>Currently the models support these {sortedClasses.length} classes:</p>
+
+  <div id="classes-list">
+    {#each CLASS_SLICES as slice}
+      <div>
+        <ul>
+          {#each sortedClasses.slice(slice,slice+20) as c}
+            <li>{c}</li>
+          {/each}
+        </ul>
+      </div>
+    {/each}
+  </div>
 
   <h3>Tensorflow? JavaScript? Is this for real??</h3>
   <p>I could hardly believe it myself, which is why I made this test website. I guess there's no running away from JavaScript.</p>
@@ -327,8 +346,14 @@
     display: block;
   }
 
+  #table-container {
+    padding: 0.5em;
+    background-color: #eee;
+  }
+
   table {
     border-collapse: collapse;
+    width: 100%;
   }
 
   th, td {
@@ -343,7 +368,7 @@
   th:last-child, td:last-child {
     padding-right: 0;
   }
-  td:not(:first-child) {
+  th:not(:first-child), td:not(:first-child) {
     text-align: right;
   }
 
@@ -351,15 +376,7 @@
     transition: 0.25s;
   }
   tbody tr:hover {
-    background-color: #eee;
-  }
-
-  .fake-anchor {
-    color: rgb(0,100,200);
-    cursor: pointer;
-  }
-  .fake-anchor:hover {
-    text-decoration: underline;
+    background-color: #ddd;
   }
 
   #loading-dimmer {
@@ -373,5 +390,26 @@
     justify-content: center;
     align-items: center;
     font-weight: bold;
+  }
+
+  #classes-list {
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 450px;
+    overflow-y: auto;
+    background-color: #eee;
+  }
+  #classes-list > div {
+    width: 100%;
+  }
+  @media only screen and (min-width: 300px) {
+    #classes-list > div {
+      width: 50%;
+    }
+  }
+  @media only screen and (min-width: 600px) {
+    #classes-list > div {
+      width: 25%;
+    }
   }
 </style>

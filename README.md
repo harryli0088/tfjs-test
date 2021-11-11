@@ -56,3 +56,7 @@ export default config;
 ```
 npm run deploy
 ```
+
+## License
+
+MIT License
