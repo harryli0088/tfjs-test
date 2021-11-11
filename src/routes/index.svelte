@@ -258,7 +258,7 @@
   <p>I made this website based off the <Blanchor href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd">Tensorflow.js COCO-SSD demo</Blanchor>. The model is ported into Tensorflow.js and runs <i>completely</i> in your browser with no backend server component, pretty cool!</p>
 
   <h3>Why does the model [suck in some way]?</h3>
-  <p>As with all machine learning models, the model is only as good as the data you give it. This model was trained on the COCO dataset and will not perform as well on images that look different. Hilariously, the SSD Lite Mobilenet V2 thinks the food image is a <span class="fake-anchor" on:click={() => setRefrigerator()}>refrigerator</span>.</p>
+  <p>As with all machine learning models, the model is only as good as the data you give it. This model was trained on the COCO dataset and will not perform as well on images that look different. Hilariously, SSD Lite Mobilenet V2 thinks the food image is a <span class="fake-anchor" on:click={() => setRefrigerator()}>refrigerator</span>.</p>
 
   <h3>COCO-SSD</h3>
   <p>COCO-SSD is an object detection model trained on the <Blanchor href="https://cocodataset.org/#home">Common Objects in Context</Blanchor> (aka COCO) dataset. SSD stands for Single Shot MultiBox Detection
