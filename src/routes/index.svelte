@@ -10,6 +10,7 @@
 
   import beach from '$lib/beach.jpg'
   import dogs from '$lib/dogs.jpg'
+  import food from '$lib/food.jpeg'
   import kittens from '$lib/kittens.jpeg'
   import Blanchor from '$lib/Blanchor.svelte';
 
@@ -25,7 +26,7 @@
   let ctx: CanvasRenderingContext2D //canvas context
   let DPR = 1 //device pixel ratio, to be set onMount
   let files: FileList //bound to the files upload input
-  let images:string[] = [ beach, dogs, kittens ] //carousel image optins
+  let images:string[] = [ beach, dogs, kittens, food ] //carousel image optins
   let modelPromise: Promise<any>
   let predictionTime: number = 0 //record performance of model
   let resultHoverIndex: number = -1 //which result is being hovered over
@@ -50,11 +51,11 @@
     state = "loaded"
   })
 
-  const onChange = async (e) => {
+  const changeModel = async (base:cocoSsd.ObjectDetectionBaseModel, shouldRun:boolean=true) => {
     state = "loading";
     (await modelPromise).dispose() //dispose of the old model
-    modelPromise = getModelPromise(e.target.value)
-    await run() //run the new model on the target image
+    modelPromise = getModelPromise(base)
+    shouldRun && await run() //run the new model on the target image
   }
 
   const changeTargetImage = async (i: number) => {
@@ -85,9 +86,10 @@
     //loosely scale the font size and line thickness with image size
     const diag = Math.hypot(targetImage.height, targetImage.width)
     const thicknessScale = Math.ceil(diag / 1000)
+    const fontSize = thicknessScale * 10
 
     ctx.drawImage(targetImage, 0, 0) //draw the target image
-    ctx.font = `${thicknessScale * 10}px Arial` //set the font
+    ctx.font = `${fontSize}px Arial` //set the font
 
     results.forEach((r,i) => { //draw each result
       const isHovering = resultHoverIndex === i
@@ -101,7 +103,7 @@
       ctx.fillText(
         `${r.score.toFixed(3)} ${r.class}`,
         r.bbox[0],
-        r.bbox[1] > 10 ? r.bbox[1] - 5 : 10
+        r.bbox[1] > fontSize ? r.bbox[1] - 5 : fontSize + 5
       )
     })
   })
@@ -121,6 +123,11 @@
       }
     }
   }
+
+  const setRefrigerator = async () => {
+    await changeModel("lite_mobilenet_v2", false)
+    await changeTargetImage(3)
+  }
 </script>
 
 <svelte:head>
@@ -129,7 +136,11 @@
 
 <header>
   <div>
-    <h1>TensorFlow.js Object Detection</h1>
+    <h1>TensorFlow.js</h1>
+
+    <div><i>In-Browser Object Detection with SSD Mobilenet</i></div>
+
+    <br/>
 
     <div style="font-size:2em">
       <Blanchor href="https://github.com/harryli0088/tfjs-test">
@@ -144,7 +155,7 @@
     <div>
       <label for="base-model" style="display:inline-block;"><h3>Select a Model:</h3></label>
 
-      <select id='base-model' on:change={onChange}>
+      <select id='base-model' on:change={e => changeModel(e.target.value)}>
         {#each MODEL_OPTIONS as o}
           <option value={o.value}>{o.display}</option>
         {/each}
@@ -239,6 +250,31 @@
   </div>
 </section>
 
+<section><hr/></section>
+
+<section>
+  <h2>Background</h2>
+
+  <p>I made this website based off the <Blanchor href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd">Tensorflow.js COCO-SSD demo</Blanchor>. The model is ported into Tensorflow.js and runs <i>completely</i> in your browser with no backend server component, pretty cool!</p>
+
+  <h3>Why does the model [suck in some way]?</h3>
+  <p>As with all machine learning models, the model is only as good as the data you give it. This model was trained on the COCO dataset and will not perform as well on images that look different. Hilariously, the SSD Lite Mobilenet V2 thinks the food image is a <span class="fake-anchor" on:click={() => setRefrigerator()}>refrigerator</span>.</p>
+
+  <h3>COCO-SSD</h3>
+  <p>COCO-SSD is an object detection model trained on the <Blanchor href="https://cocodataset.org/#home">Common Objects in Context</Blanchor> (aka COCO) dataset. SSD stands for Single Shot MultiBox Detection
+  which generates default boxes over different aspect ratios and scales, adjusts boxes during prediction time, and can combine predictions from multiple feature maps to handle various object sizes. SSD encapsulates all computation in a single Feed-Forward Convolutional Neural Network which eliminates proposal generation and resampling, making it easier to train and operationalize (<Blanchor href="https://arxiv.org/abs/1512.02325">full paper</Blanchor>).</p>
+
+  <h3>Tensorflow? JavaScript? Is this for real??</h3>
+  <p>I could hardly believe it myself, which is why I made this test website. I guess there is no running away from JavaScript.</p>
+  <p>Quoted from <Blanchor href="https://www.tensorflow.org/js/guide/platform_environment">the docs</Blanchor>: "TensorFlow.js executes operations on the GPU by running WebGL shader programs. These shaders are assembled and compiled lazily when the user asks to execute an operation".</p>
+  <p>Say what you will about JavaScript; it's powerful enough to run client-side ML! (Some people even claim that you could do all the training in JS...but I haven't gotten there yet)</p>
+
+  <h3>Advantages of client-side Machine Learning</h3>
+  <p>Running ML models in a browser or even in a React Native mobile app can greatly simplify the application architecture. Instead of building a beefy server that can handle many prediction requests, you can simply cache the model in a Content Delivery Network and make the user's device do all the work for you!</p>
+
+  <p>Of course, one of the downsides of client-side ML is that your model is published for everyone to see, not good if you have some secret sauce. Also, extremely large models could eat up network bandwidth and a user's processing power, and not all client devices have GPU hardware.</p>
+</section>
+
 <style>
   header {
 		display: flex;
@@ -316,6 +352,14 @@
   }
   tbody tr:hover {
     background-color: #eee;
+  }
+
+  .fake-anchor {
+    color: rgb(0,100,200);
+    cursor: pointer;
+  }
+  .fake-anchor:hover {
+    text-decoration: underline;
   }
 
   #loading-dimmer {
