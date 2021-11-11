@@ -4,38 +4,39 @@
   import '@tensorflow/tfjs-backend-cpu'
   import '@tensorflow/tfjs-backend-webgl'
   import * as cocoSsd from '@tensorflow-models/coco-ssd'
+  import Fa from 'svelte-fa'
+  import { faGithub } from '@fortawesome/free-brands-svg-icons'
+  import { faImage } from '@fortawesome/free-solid-svg-icons'
 
   import beach from '$lib/beach.jpg'
   import dogs from '$lib/dogs.jpg'
   import kittens from '$lib/kittens.jpeg'
+  import Blanchor from '$lib/Blanchor.svelte';
 
+  //all the available ObjectDetectionBaseModel options from node_modules/@tensorflow-models/coco-ssd/dist/index.d.ts
   const MODEL_OPTIONS:{display: string, value: cocoSsd.ObjectDetectionBaseModel }[] = [
     { display: "SSD Lite Mobilenet V2", value: 'lite_mobilenet_v2' },
     { display: "SSD Mobilenet V2", value: 'mobilenet_v2' },
     { display: "SSD Mobilenet V1", value: 'mobilenet_v1' },
   ]
 
-  let canvas: HTMLCanvasElement
-  let canvasContainerWidth: number = 600
-  let ctx: CanvasRenderingContext2D
-  let DPR = 1
-  let files: FileList
-  let images:string[] = [
-    beach,
-    dogs,
-    kittens
-  ]
+  let canvas: HTMLCanvasElement //bound to canvas
+  let canvasContainerWidth: number = 600 //bound to the width of the canvas container
+  let ctx: CanvasRenderingContext2D //canvas context
+  let DPR = 1 //device pixel ratio, to be set onMount
+  let files: FileList //bound to the files upload input
+  let images:string[] = [ beach, dogs, kittens ] //carousel image optins
   let modelPromise: Promise<any>
-  let predictionTime: number = 0
-  let resultHoverIndex: number = -1
-  let results: {
+  let predictionTime: number = 0 //record performance of model
+  let resultHoverIndex: number = -1 //which result is being hovered over
+  let results: { //record results of model
     bbox: [number,number,number,number],
     class: string,
     score: number,
   }[] = []
-  let state:string = "loading"
-  let targetImage: HTMLImageElement
-  let targetImageIndex: number = 0
+  let state:string = "loading" //loading state
+  let targetImage: HTMLImageElement //bound to hidden target image
+  let targetImageIndex: number = 0 //which image option is currently selected
 
   //prep the selected model to be loaded
   const getModelPromise = (base:cocoSsd.ObjectDetectionBaseModel = "lite_mobilenet_v2") => cocoSsd.load({base})
@@ -56,7 +57,7 @@
     await run() //run the new model on the target image
   }
 
-  const changeImage = async (i: number) => {
+  const changeTargetImage = async (i: number) => {
     targetImageIndex = i //change the target image
     await run() //run the model on the new image
   }
@@ -107,6 +108,9 @@
         const reader = new FileReader() //create a FileReader to read the file
         reader.onload = () => { //on load callback
           images = images.concat(reader.result as string) //add the image to the array
+          if(i === files.length - 1) { //if this is the last uploaded image
+            changeTargetImage(images.length - 1) //auto analyze the last image
+          }
         }
         reader.readAsDataURL(file) //read the file
       }
@@ -119,12 +123,21 @@
 </svelte:head>
 
 <header>
-  <h1>TensorFlow.js Object Detection</h1>
+  <div>
+    <h1>TensorFlow.js Object Detection</h1>
+
+    <div style="font-size:2em">
+      <Blanchor href="https://github.com/harryli0088/tfjs-test">
+        <Fa class="icon-button" icon={faGithub} style="color:white;"/>
+      </Blanchor>
+    </div>
+  </div>
 </header>
 
 <section>
   <div style="position: relative">
     <h3>Select a Model</h3>
+
     <div>
       <select id='base_model' on:change={onChange}>
         {#each MODEL_OPTIONS as o}
@@ -136,21 +149,26 @@
     <div>
       <h3>Select an Image to Analyze</h3>
       <div>
-        <label id="upload-images-button" class="label-button" for="upload-images">Upload Your Own Image</label>
+        <label id="upload-images-button" class="label-button" for="upload-images">
+          Upload Your Own Image
+          &nbsp; <Fa icon={faImage}/>
+        </label>
         <input type="file" id="upload-images" multiple accept="image/*" bind:files={files} on:change={uploadImages}>
       </div>
 
       <br/>
 
-      <div id="carousel">
-        {#each images as src,i}
-          <img
-            alt="analyze option"
-            class={`image-option ${(targetImageIndex===i ? "focused" : "")}`}
-            on:click={() => changeImage(i)}
-            {src}
-          />
-        {/each}
+      <div id="carousel-container">
+        <div id="carousel">
+          {#each images as src,i}
+            <img
+              alt="analyze option"
+              class={`image-option ${(targetImageIndex===i ? "focused" : "")}`}
+              on:click={() => changeTargetImage(i)}
+              {src}
+            />
+          {/each}
+        </div>
       </div>
     </div>
 
@@ -180,31 +198,35 @@
     <br/>
 
     <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Class</th>
-            <th>Confidence Score</th>
-            <th>Top Left X px</th>
-            <th>Top Left Y px</th>
-            <th>Width px</th>
-            <th>Height px</th>
-          </tr>
-        </thead>
-
-        <tbody on:mouseout={() => resultHoverIndex = -1} on:blur={() => resultHoverIndex = -1}>
-          {#each results as r,i}
-            <tr on:mouseenter={() => resultHoverIndex = i}>
-              <td>{r.class}</td>
-              <td>{r.score.toFixed(3)}</td>
-              <td>{Math.round(r.bbox[0])}</td>
-              <td>{Math.round(r.bbox[1])}</td>
-              <td>{Math.round(r.bbox[2])}</td>
-              <td>{Math.round(r.bbox[3])}</td>
+      {#if results.length > 0}
+        <table>
+          <thead>
+            <tr>
+              <th>Class</th>
+              <th>Confidence</th>
+              <th>Top Left X px</th>
+              <th>Top Left Y px</th>
+              <th>Width px</th>
+              <th>Height px</th>
             </tr>
-          {/each}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody on:mouseout={() => resultHoverIndex = -1} on:blur={() => resultHoverIndex = -1}>
+              {#each results as r,i}
+                <tr on:mouseenter={() => resultHoverIndex = i}>
+                  <td>{r.class}</td>
+                  <td>{r.score.toFixed(3)}</td>
+                  <td>{Math.round(r.bbox[0])}</td>
+                  <td>{Math.round(r.bbox[1])}</td>
+                  <td>{Math.round(r.bbox[2])}</td>
+                  <td>{Math.round(r.bbox[3])}</td>
+                </tr>
+              {/each}
+          </tbody>
+        </table>
+      {:else}
+        <div><b>The model did not detect any objects</b></div>
+      {/if}
     </div>
 
     {#if state === "loading"}
@@ -223,6 +245,12 @@
     text-align: center;
     padding-top: 5em;
     padding-bottom: 5em;
+  }
+
+  #carousel-container {
+    overflow-x: auto;
+    padding: 0.5em;
+    background-color: #eee;
   }
 
   #carousel {
@@ -265,8 +293,8 @@
 
   th, td {
     text-align: left;
-    padding-left: 1em;
-    padding-right: 1em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
   }
   th:first-child, td:first-child {
     padding-left: 0;
@@ -274,9 +302,12 @@
   th:last-child, td:last-child {
     padding-right: 0;
   }
+  td:not(:first-child) {
+    text-align: right;
+  }
 
   tbody tr {
-    transition: 0.5s;
+    transition: 0.25s;
   }
   tbody tr:hover {
     background-color: #eee;
