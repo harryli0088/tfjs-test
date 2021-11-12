@@ -18,18 +18,18 @@
 
 		
 
-		<link rel="modulepreload" href="/tfjs-test/_app/start-94454740.js">
-		<link rel="modulepreload" href="/tfjs-test/_app/chunks/vendor-a0a436af.js">
-		<link rel="modulepreload" href="/tfjs-test/_app/pages/__layout.svelte-4fe8e80d.js">
-		<link rel="modulepreload" href="/tfjs-test/_app/chunks/Blanchor-7de40104.js">
-		<link rel="modulepreload" href="/tfjs-test/_app/pages/index.svelte-649b61b4.js">
+		<link rel="modulepreload" href="/tfjs-test/_app/start-edc5c221.js">
+		<link rel="modulepreload" href="/tfjs-test/_app/chunks/vendor-4a630360.js">
+		<link rel="modulepreload" href="/tfjs-test/_app/pages/__layout.svelte-d68f00d5.js">
+		<link rel="modulepreload" href="/tfjs-test/_app/chunks/Blanchor-9aa4d670.js">
+		<link rel="modulepreload" href="/tfjs-test/_app/pages/index.svelte-173f725f.js">
 		<link rel="stylesheet" href="/tfjs-test/_app/assets/start-61d1577b.css">
 		<link rel="stylesheet" href="/tfjs-test/_app/assets/vendor-ec9510ad.css">
 		<link rel="stylesheet" href="/tfjs-test/_app/assets/pages/__layout.svelte-b07cf12f.css">
-		<link rel="stylesheet" href="/tfjs-test/_app/assets/pages/index.svelte-f9972197.css">
+		<link rel="stylesheet" href="/tfjs-test/_app/assets/pages/index.svelte-8e7207ba.css">
 
 		<script type="module">
-			import { start } from "/tfjs-test/_app/start-94454740.js";
+			import { start } from "/tfjs-test/_app/start-edc5c221.js";
 			start({
 				target: document.querySelector("#svelte"),
 				paths: {"base":"/tfjs-test","assets":""},
@@ -42,8 +42,8 @@
 					status: 200,
 					error: null,
 					nodes: [
-						import("/tfjs-test/_app/pages/__layout.svelte-4fe8e80d.js"),
-						import("/tfjs-test/_app/pages/index.svelte-649b61b4.js")
+						import("/tfjs-test/_app/pages/__layout.svelte-d68f00d5.js"),
+						import("/tfjs-test/_app/pages/index.svelte-173f725f.js")
 					],
 					page: {
 						host: location.host, // TODO this is redundant
@@ -61,7 +61,7 @@
 
 <main>
 
-<header class="svelte-1j7lxe4"><div><h1>TensorFlow.js</h1>
+<header class="svelte-10g5ip5"><div><h1>TensorFlow.js</h1>
 
     <div><i>In-Browser Object Detection with SSD Mobilenet</i></div>
 
@@ -75,17 +75,15 @@
 
     <div><h3>Select an Image to Analyze:</h3>
 
-      <div id="carousel-container" class="svelte-1j7lxe4"><div id="carousel" class="svelte-1j7lxe4"><img alt="analyze option" class="image-option focused svelte-1j7lxe4" src="/tfjs-test/_app/assets/beach-1cce24f1.jpg"><img alt="analyze option" class="image-option  svelte-1j7lxe4" src="/tfjs-test/_app/assets/dogs-7a39fd04.jpg"><img alt="analyze option" class="image-option  svelte-1j7lxe4" src="/tfjs-test/_app/assets/kittens-6dbc1477.jpeg"><img alt="analyze option" class="image-option  svelte-1j7lxe4" src="/tfjs-test/_app/assets/food-fa9167d1.jpeg"></div></div>
+      <div id="carousel-container" class="svelte-10g5ip5"><div id="carousel" class="svelte-10g5ip5"><img alt="analyze option" class="image-option focused svelte-10g5ip5" src="/tfjs-test/_app/assets/beach-1cce24f1.jpg"><img alt="analyze option" class="image-option  svelte-10g5ip5" src="/tfjs-test/_app/assets/dogs-7a39fd04.jpg"><img alt="analyze option" class="image-option  svelte-10g5ip5" src="/tfjs-test/_app/assets/kittens-6dbc1477.jpeg"><img alt="analyze option" class="image-option  svelte-10g5ip5" src="/tfjs-test/_app/assets/food-fa9167d1.jpeg"></div></div>
 
-      <div style="margin-top: 0.5em;text-align:right;"><label id="upload-images-button" class="label-button svelte-1j7lxe4" for="upload-images">Upload Your Own Image
+      <div style="margin-top: 0.5em;text-align:right;"><label id="upload-images-button" class="label-button svelte-10g5ip5" for="upload-images">Upload Your Own Image
             <svg id="" class="fa svelte-1cj2gr0" style="height:1em;vertical-align:-.125em;transform-origin:center;overflow:visible" viewBox="0 0 512 512" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg"><g transform="translate(256 256)" transform-origin="128 0"><g transform="translate(0,0) scale(1,1)"><path d="M464 448H48c-26.51 0-48-21.49-48-48V112c0-26.51 21.49-48 48-48h416c26.51 0 48 21.49 48 48v288c0 26.51-21.49 48-48 48zM112 120c-30.928 0-56 25.072-56 56s25.072 56 56 56 56-25.072 56-56-25.072-56-56-56zM64 384h384V272l-87.515-87.515c-4.686-4.686-12.284-4.686-16.971 0L208 320l-55.515-55.515c-4.686-4.686-12.284-4.686-16.971 0L64 336v48z" fill="currentColor" transform="translate(-256 -256)"></path></g></g></svg></label>
-        <input type="file" id="upload-images" multiple accept="image/*" class="svelte-1j7lxe4"></div></div>
+        <input type="file" id="upload-images" multiple accept="image/*" class="svelte-10g5ip5"></div></div>
 
     <h3>Analyzed Image</h3>
 
-    <div><img alt="input" id="target-image" src="/tfjs-test/_app/assets/beach-1cce24f1.jpg" class="svelte-1j7lxe4"></div>
-
-    <div><canvas id="canvas" style="width:600px;" class="svelte-1j7lxe4"></canvas></div>
+    <div><canvas id="canvas" style="width:600px;" class="svelte-10g5ip5"></canvas></div>
 
     <br>
 
@@ -93,22 +91,31 @@
 
     <br>
 
-    <div style="overflow-x:auto;"><div><b>The model did not detect any objects</b></div></div>
+    <div id="table-container" style="overflow-x:auto;" class="svelte-10g5ip5"><div><b>The model did not detect any objects</b></div></div>
 
-    <div id="loading-dimmer" class="svelte-1j7lxe4">Loading Model...</div></div></section>
+    <div id="loading-dimmer" class="svelte-10g5ip5">Loading Model...</div></div></section>
 
 <section><hr></section>
 
 <section><h2>Background</h2>
 
-  <p>I made this website based off the <a href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd" target="_blank" rel="noopener noreferrer">Tensorflow.js COCO-SSD demo</a>. The model is ported into Tensorflow.js and runs <i>completely</i> in your browser with no backend server component, pretty cool!</p>
+  <p>I made this website based off the <a href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd" target="_blank" rel="noopener noreferrer">Tensorflow.js COCO-SSD demo</a>. The model is ported into Tensorflow.js and runs <i>completely</i> in your browserInfo with no backend server component, pretty cool!</p>
 
   <h3>Why does the model [suck in some way]?</h3>
-  <p>As with all machine learning models, the model is only as good as the data you give it. This model was trained on the COCO dataset and will not perform as well on images that look different. Hilariously, SSD Lite Mobilenet V2 thinks the food image is a <span class="fake-anchor svelte-1j7lxe4">refrigerator</span>.</p>
+  <p>As with all machine learning models, the model is only as good as the data you give it. This model was trained on the COCO dataset and will not perform as well on images that look different. Hilariously, SSD Lite Mobilenet V2 thinks the food image is a <a href="#carousel">refrigerator</a>.</p>
 
   <h3>COCO-SSD</h3>
   <p>COCO-SSD is an object detection model trained on the <a href="https://cocodataset.org/#home" target="_blank" rel="noopener noreferrer">Common Objects in Context</a> (aka COCO) dataset. SSD stands for Single Shot MultiBox Detection
   which generates default boxes over different aspect ratios and scales, adjusts boxes during prediction time, and can combine predictions from multiple feature maps to handle various object sizes. SSD encapsulates all computation in a single Feed-Forward Convolutional Neural Network which eliminates proposal generation and resampling, making it easier to train and operationalize (<a href="https://arxiv.org/abs/1512.02325" target="_blank" rel="noopener noreferrer">full paper</a>).</p>
+
+
+  <p>Currently the models support these 80 classes:</p>
+
+  <div id="classes-list" class="svelte-10g5ip5"><div class="svelte-10g5ip5"><ul><li>airplane</li><li>apple</li><li>backpack</li><li>banana</li><li>baseball bat</li><li>baseball glove</li><li>bear</li><li>bed</li><li>bench</li><li>bicycle</li><li>bird</li><li>boat</li><li>book</li><li>bottle</li><li>bowl</li><li>broccoli</li><li>bus</li><li>cake</li><li>car</li><li>carrot</li></ul>
+      </div><div class="svelte-10g5ip5"><ul><li>cat</li><li>cell phone</li><li>chair</li><li>clock</li><li>couch</li><li>cow</li><li>cup</li><li>dining table</li><li>dog</li><li>donut</li><li>elephant</li><li>fire hydrant</li><li>fork</li><li>frisbee</li><li>giraffe</li><li>hair drier</li><li>handbag</li><li>horse</li><li>hot dog</li><li>keyboard</li></ul>
+      </div><div class="svelte-10g5ip5"><ul><li>kite</li><li>knife</li><li>laptop</li><li>microwave</li><li>motorcycle</li><li>mouse</li><li>orange</li><li>oven</li><li>parking meter</li><li>person</li><li>pizza</li><li>potted plant</li><li>refrigerator</li><li>remote</li><li>sandwich</li><li>scissors</li><li>sheep</li><li>sink</li><li>skateboard</li><li>skis</li></ul>
+      </div><div class="svelte-10g5ip5"><ul><li>snowboard</li><li>spoon</li><li>sports ball</li><li>stop sign</li><li>suitcase</li><li>surfboard</li><li>teddy bear</li><li>tennis racket</li><li>tie</li><li>toaster</li><li>toilet</li><li>toothbrush</li><li>traffic light</li><li>train</li><li>truck</li><li>tv</li><li>umbrella</li><li>vase</li><li>wine glass</li><li>zebra</li></ul>
+      </div></div>
 
   <h3>Tensorflow? JavaScript? Is this for real??</h3>
   <p>I could hardly believe it myself, which is why I made this test website. I guess there&#39;s no running away from JavaScript.</p>
@@ -116,7 +123,7 @@
   <p>Say what you will about JavaScript; it&#39;s powerful enough to run client-side ML! (Some people even claim that you could do all the training in JS...but I haven&#39;t gotten there yet)</p>
 
   <h3>Advantages of client-side Machine Learning</h3>
-  <p>Running ML models in a browser or even in a React Native mobile app can greatly simplify the application architecture. Instead of building a beefy server that can handle many prediction requests, you can simply cache the model in a Content Delivery Network and make the user&#39;s device do all the work for you!</p>
+  <p>Running ML models in a browserInfo or even in a React Native mobile app can greatly simplify the application architecture. Instead of building a beefy server that can handle many prediction requests, you can simply cache the model in a Content Delivery Network and make the user&#39;s device do all the work for you!</p>
 
   <p>Of course, one of the downsides of client-side ML is that your model is published for everyone to see, not good if you have some secret sauce. Also, extremely large models could eat up network bandwidth and a user&#39;s processing power, and not all client devices have GPU hardware.</p>
 </section></main>
