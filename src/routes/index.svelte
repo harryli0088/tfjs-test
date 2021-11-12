@@ -434,6 +434,16 @@
     justify-content: center;
     align-items: center;
     font-weight: bold;
+    opacity: 0;
+    animation-name: fadeIn;
+    animation-fill-mode: forwards;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+  }
+  @keyframes fadeIn {
+    0% {opacity: 0;}
+    50% {opacity: 0;}
+    100% {opacity: 1;}
   }
 
   #classes-list {
