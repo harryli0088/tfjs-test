@@ -8,6 +8,7 @@
   import Fa from 'svelte-fa'
   import { faGithub } from '@fortawesome/free-brands-svg-icons'
   import { faImage } from '@fortawesome/free-solid-svg-icons'
+  import { detect } from "detect-browser"
 
   import beach from '$lib/beach.jpg'
   import dogs from '$lib/dogs.jpg'
@@ -22,10 +23,10 @@
     { display: "SSD Mobilenet V1", value: 'mobilenet_v1' },
   ]
 
+  let browserInfo
   let canvas: HTMLCanvasElement //bound to canvas
   let canvasContainerWidth: number = 600 //bound to the width of the canvas container
   let ctx: CanvasRenderingContext2D //canvas context
-  let DPR = 1 //device pixel ratio, to be set onMount
   let files: FileList //bound to the files upload input
   let images:string[] = [ beach, dogs, kittens, food ] //carousel image optins
   let modelPromise: Promise<any>
@@ -37,58 +38,138 @@
     score: number,
   }[] = []
   let state:string = "loading" //loading state
-  let targetImage: HTMLImageElement //bound to hidden target image
+  let targetImage: HTMLImageElement //to be set onMount
   let targetImageIndex: number = 0 //which image option is currently selected
+
+  //canvas parameters
+  let fontSize: number = 10
+  let height: number = 100
+  let thicknessScale: number = 1
+  let width: number = 100
+
+  const sortedClasses = Object.values(CLASSES).map(c => c.displayName).sort()
+  const CLASS_SLICES = [0,20,40,60]
 
   //prep the selected model to be loaded
   const getModelPromise = (base:cocoSsd.ObjectDetectionBaseModel = "lite_mobilenet_v2") => cocoSsd.load({base})
 
   onMount(async () => {
-    DPR = window.devicePixelRatio
+    browserInfo = detect() //get the browser info
     ctx = canvas.getContext('2d')
-
     modelPromise = getModelPromise()
-    await run()
-    state = "loaded"
+    targetImage = document.createElement("img") //create a new image element that is not visible
+
+    setTargetImageIndex(0) //auto analyze the first image on mount
   })
 
-  const changeModel = async (base:cocoSsd.ObjectDetectionBaseModel, shouldRun:boolean=true) => {
+  /**
+   * change the model
+   * @param base          name of the base model
+   * @param shouldAnalyze whether we should immediately analyze with the new model, defaults to true
+   */
+  const changeModel = async (base:cocoSsd.ObjectDetectionBaseModel, shouldAnalyze:boolean=true) => {
     state = "loading";
     (await modelPromise).dispose() //dispose of the old model
     modelPromise = getModelPromise(base)
-    shouldRun && await run() //run the new model on the target image
-  }
-
-  const changeTargetImage = async (i: number) => {
-    targetImageIndex = i //change the target image
-    await run() //run the model on the new image
-  }
-
-  const run = async () => {
-    state = "loading"
-
-    const model = await modelPromise //save models as static JSON?
-    const start = Date.now() //record the start time
-    results = await model.detect(targetImage) //run the model on the image
-    predictionTime = Date.now() - start //record the time elapsed
-
+    shouldAnalyze && await analyze() //run the new model on the target image
     state = "loaded"
   }
 
-  afterUpdate(() => {
+  /**
+   * set the new target image index
+   * once the image loads, analyze the image and update the canvas parameters
+   * @param i index of the image to use
+   */
+  const setTargetImageIndex = (i: number) => {
+    state = "loading"
+
+    targetImageIndex = i //change the target image
+    targetImage.onload = async () => {
+      await analyze() //run the model on the new image
+      updateCanvasParameters()
+      state = "loaded"
+    }
+    targetImage.src = images[targetImageIndex]
+  }
+
+  /**
+   * analyze the current target image using the model
+   */
+  const analyze = async () => {
+    try {
+      const model = await modelPromise //save models as static JSON?
+      const start = Date.now() //record the start time
+      results = await model.detect(targetImage) //run the model on the image
+      predictionTime = Date.now() - start //record the time elapsed
+    }
+    catch(err) {
+      console.error(err)
+    }
+  }
+
+  /**
+   * updates all the canvas parameters for the new image (dimensions, sizes, scaling)
+   */
+  const updateCanvasParameters = () => {
+    const DPR = window.devicePixelRatio
+
+    height = targetImage.height
+    width = targetImage.width
+
+    //handle an iOS canvas size restriction
+    let shifts = 0
+    if(browserInfo?.os === "iOS") {
+      while(width * DPR * height * DPR > 16777216) {
+        height = height >> 1 //right bit shift
+        width = width >> 1 //right bit shift
+        shifts++ //count the numebr of shifts
+      }
+    }
+
     //DPR is important for improving the picture quality of the canvas, especially for text
     //based off this fiddle http://jsfiddle.net/65maD/83/ from this stack answer https://stackoverflow.com/a/54027313
     //set the canvas size to the image size scaled by DPR
     //BUG: when you enter mobile mode in Chrome, the target image has 0 dimensions after the first click
-    canvas.height = targetImage.height * DPR
-    canvas.width = targetImage.width * DPR
-    ctx.scale(DPR, DPR) //set the new scale via DPR 
+    canvas.height = height * DPR
+    canvas.width = width * DPR
+    ctx.scale(Math.max(1, DPR>>shifts), Math.max(1, DPR>>shifts)) //set the new scale via DPR 
 
     //loosely scale the font size and line thickness with image size
-    const diag = Math.hypot(targetImage.height, targetImage.width)
-    const thicknessScale = Math.ceil(diag / 1000)
-    const fontSize = thicknessScale * 10
+    const diag = Math.hypot(height, width)
+    thicknessScale = Math.ceil(diag / 1000)
+    fontSize = thicknessScale * 10
+  }
 
+  /**
+   * callback to run when the user uploads new images
+   * the files variable is bound to the input element
+   */
+  const uploadImages = () => {
+    if(files) { //if there are files to read
+      for(let i=0; i<files.length; ++i) { //loop through the files
+        const file = files[i] //get the current file
+        const reader = new FileReader() //create a FileReader to read the file
+        reader.onload = () => { //on load callback
+          images = images.concat(reader.result as string) //add the image to the array
+          if(i === files.length - 1) { //if this is the last uploaded image
+            setTargetImageIndex(images.length - 1) //auto analyze the last image
+          }
+        }
+        reader.readAsDataURL(file) //read the file
+      }
+    }
+  }
+
+  /**
+   * sets the parameters to run the food and refrigerator example
+   */
+  const setRefrigerator = async () => {
+    await changeModel("lite_mobilenet_v2", false)
+    await setTargetImageIndex(3)
+  }
+
+  //redraw the canvas after a svelte update
+  afterUpdate(() => {
     ctx.drawImage(targetImage, 0, 0) //draw the target image
     ctx.font = `${fontSize}px Arial` //set the font
 
@@ -108,30 +189,6 @@
       )
     })
   })
-
-  const uploadImages = () => {
-    if(files) { //if there are files to read
-      for(let i=0; i<files.length; ++i) { //loop through the files
-        const file = files[i] //get the current file
-        const reader = new FileReader() //create a FileReader to read the file
-        reader.onload = () => { //on load callback
-          images = images.concat(reader.result as string) //add the image to the array
-          if(i === files.length - 1) { //if this is the last uploaded image
-            changeTargetImage(images.length - 1) //auto analyze the last image
-          }
-        }
-        reader.readAsDataURL(file) //read the file
-      }
-    }
-  }
-
-  const setRefrigerator = async () => {
-    await changeModel("lite_mobilenet_v2", false)
-    await changeTargetImage(3)
-  }
-
-  const sortedClasses = Object.values(CLASSES).map(c => c.displayName).sort()
-  const CLASS_SLICES = [0,20,40,60]
 </script>
 
 <svelte:head>
@@ -175,7 +232,7 @@
             <img
               alt="analyze option"
               class={`image-option ${(targetImageIndex===i ? "focused" : "")}`}
-              on:click={() => changeTargetImage(i)}
+              on:click={() => setTargetImageIndex(i)}
               {src}
             />
           {/each}
@@ -192,15 +249,6 @@
     </div>
 
     <h3>Analyzed Image</h3>
-
-    <div>
-      <img
-        alt="input"
-        bind:this={targetImage}
-        id="target-image"
-        src={images[targetImageIndex]}
-      />
-    </div>
 
     <div bind:clientWidth={canvasContainerWidth}>
       <canvas
@@ -259,7 +307,7 @@
 <section>
   <h2>Background</h2>
 
-  <p>I made this website based off the <Blanchor href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd">Tensorflow.js COCO-SSD demo</Blanchor>. The model is ported into Tensorflow.js and runs <i>completely</i> in your browser with no backend server component, pretty cool!</p>
+  <p>I made this website based off the <Blanchor href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd">Tensorflow.js COCO-SSD demo</Blanchor>. The model is ported into Tensorflow.js and runs <i>completely</i> in your browserInfo with no backend server component, pretty cool!</p>
 
   <h3>Why does the model [suck in some way]?</h3>
   <p>As with all machine learning models, the model is only as good as the data you give it. This model was trained on the COCO dataset and will not perform as well on images that look different. Hilariously, SSD Lite Mobilenet V2 thinks the food image is a <a href="#carousel" on:click={() => setRefrigerator()}>refrigerator</a>.</p>
@@ -289,7 +337,7 @@
   <p>Say what you will about JavaScript; it's powerful enough to run client-side ML! (Some people even claim that you could do all the training in JS...but I haven't gotten there yet)</p>
 
   <h3>Advantages of client-side Machine Learning</h3>
-  <p>Running ML models in a browser or even in a React Native mobile app can greatly simplify the application architecture. Instead of building a beefy server that can handle many prediction requests, you can simply cache the model in a Content Delivery Network and make the user's device do all the work for you!</p>
+  <p>Running ML models in a browserInfo or even in a React Native mobile app can greatly simplify the application architecture. Instead of building a beefy server that can handle many prediction requests, you can simply cache the model in a Content Delivery Network and make the user's device do all the work for you!</p>
 
   <p>Of course, one of the downsides of client-side ML is that your model is published for everyone to see, not good if you have some secret sauce. Also, extremely large models could eat up network bandwidth and a user's processing power, and not all client devices have GPU hardware.</p>
 </section>
@@ -335,10 +383,6 @@
   }
 
   #upload-images {
-    display: none;
-  }
-
-  #target-image {
     display: none;
   }
 
