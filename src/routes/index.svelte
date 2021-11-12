@@ -14,6 +14,7 @@
   import dogs from '$lib/dogs.jpg'
   import food from '$lib/food.jpeg'
   import kittens from '$lib/kittens.jpeg'
+  import pizza from '$lib/pizza.jpeg'
   import Blanchor from '$lib/Blanchor.svelte'
 
   //all the available ObjectDetectionBaseModel options from node_modules/@tensorflow-models/coco-ssd/dist/index.d.ts
@@ -28,7 +29,7 @@
   let canvasContainerWidth: number = 600 //bound to the width of the canvas container
   let ctx: CanvasRenderingContext2D //canvas context
   let files: FileList //bound to the files upload input
-  let images:string[] = [ beach, dogs, kittens, food ] //carousel image optins
+  let images:string[] = [ beach, dogs, kittens, pizza, food ] //carousel image optins
   let modelPromise: Promise<any>
   let predictionTime: number = 0 //record performance of model
   let resultHoverIndex: number = -1 //which result is being hovered over
@@ -165,7 +166,7 @@
    */
   const setRefrigerator = async () => {
     await changeModel("lite_mobilenet_v2", false)
-    await setTargetImageIndex(3)
+    await setTargetImageIndex(images.indexOf(food))
   }
 
   //redraw the canvas after a svelte update
@@ -307,7 +308,7 @@
 <section>
   <h2>Background</h2>
 
-  <p>I made this website based off the <Blanchor href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd">Tensorflow.js COCO-SSD demo</Blanchor>. The model is ported into Tensorflow.js and runs <i>completely</i> in your browserInfo with no backend server component, pretty cool!</p>
+  <p>I made this website based off the <Blanchor href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd">Tensorflow.js COCO-SSD demo</Blanchor>. The model is ported into Tensorflow.js and runs <i>completely</i> in your browser with no backend server component, pretty cool!</p>
 
   <h3>Why does the model [suck in some way]?</h3>
   <p>As with all machine learning models, the model is only as good as the data you give it. This model was trained on the COCO dataset and will not perform as well on images that look different. Hilariously, SSD Lite Mobilenet V2 thinks the food image is a <a href="#carousel" on:click={() => setRefrigerator()}>refrigerator</a>.</p>
@@ -337,7 +338,7 @@
   <p>Say what you will about JavaScript; it's powerful enough to run client-side ML! (Some people even claim that you could do all the training in JS...but I haven't gotten there yet)</p>
 
   <h3>Advantages of client-side Machine Learning</h3>
-  <p>Running ML models in a browserInfo or even in a React Native mobile app can greatly simplify the application architecture. Instead of building a beefy server that can handle many prediction requests, you can simply cache the model in a Content Delivery Network and make the user's device do all the work for you!</p>
+  <p>Running ML models in a browser or even in a React Native mobile app can greatly simplify the application architecture. Instead of building a beefy server that can handle many prediction requests, you can simply cache the model in a Content Delivery Network and make the user's device do all the work for you!</p>
 
   <p>Of course, one of the downsides of client-side ML is that your model is published for everyone to see, not good if you have some secret sauce. Also, extremely large models could eat up network bandwidth and a user's processing power, and not all client devices have GPU hardware.</p>
 </section>
