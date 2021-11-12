@@ -18,18 +18,18 @@
 
 		
 
-		<link rel="modulepreload" href="/tfjs-test/_app/start-edc5c221.js">
+		<link rel="modulepreload" href="/tfjs-test/_app/start-55f43397.js">
 		<link rel="modulepreload" href="/tfjs-test/_app/chunks/vendor-4a630360.js">
-		<link rel="modulepreload" href="/tfjs-test/_app/pages/__layout.svelte-d68f00d5.js">
+		<link rel="modulepreload" href="/tfjs-test/_app/pages/__layout.svelte-99a0aeb2.js">
 		<link rel="modulepreload" href="/tfjs-test/_app/chunks/Blanchor-9aa4d670.js">
-		<link rel="modulepreload" href="/tfjs-test/_app/pages/index.svelte-173f725f.js">
+		<link rel="modulepreload" href="/tfjs-test/_app/pages/index.svelte-f1b7569b.js">
 		<link rel="stylesheet" href="/tfjs-test/_app/assets/start-61d1577b.css">
 		<link rel="stylesheet" href="/tfjs-test/_app/assets/vendor-ec9510ad.css">
 		<link rel="stylesheet" href="/tfjs-test/_app/assets/pages/__layout.svelte-b07cf12f.css">
 		<link rel="stylesheet" href="/tfjs-test/_app/assets/pages/index.svelte-8e7207ba.css">
 
 		<script type="module">
-			import { start } from "/tfjs-test/_app/start-edc5c221.js";
+			import { start } from "/tfjs-test/_app/start-55f43397.js";
 			start({
 				target: document.querySelector("#svelte"),
 				paths: {"base":"/tfjs-test","assets":""},
@@ -42,8 +42,8 @@
 					status: 200,
 					error: null,
 					nodes: [
-						import("/tfjs-test/_app/pages/__layout.svelte-d68f00d5.js"),
-						import("/tfjs-test/_app/pages/index.svelte-173f725f.js")
+						import("/tfjs-test/_app/pages/__layout.svelte-99a0aeb2.js"),
+						import("/tfjs-test/_app/pages/index.svelte-f1b7569b.js")
 					],
 					page: {
 						host: location.host, // TODO this is redundant
@@ -75,7 +75,7 @@
 
     <div><h3>Select an Image to Analyze:</h3>
 
-      <div id="carousel-container" class="svelte-10g5ip5"><div id="carousel" class="svelte-10g5ip5"><img alt="analyze option" class="image-option focused svelte-10g5ip5" src="/tfjs-test/_app/assets/beach-1cce24f1.jpg"><img alt="analyze option" class="image-option  svelte-10g5ip5" src="/tfjs-test/_app/assets/dogs-7a39fd04.jpg"><img alt="analyze option" class="image-option  svelte-10g5ip5" src="/tfjs-test/_app/assets/kittens-6dbc1477.jpeg"><img alt="analyze option" class="image-option  svelte-10g5ip5" src="/tfjs-test/_app/assets/food-fa9167d1.jpeg"></div></div>
+      <div id="carousel-container" class="svelte-10g5ip5"><div id="carousel" class="svelte-10g5ip5"><img alt="analyze option" class="image-option focused svelte-10g5ip5" src="/tfjs-test/_app/assets/beach-1cce24f1.jpg"><img alt="analyze option" class="image-option  svelte-10g5ip5" src="/tfjs-test/_app/assets/dogs-7a39fd04.jpg"><img alt="analyze option" class="image-option  svelte-10g5ip5" src="/tfjs-test/_app/assets/kittens-6dbc1477.jpeg"><img alt="analyze option" class="image-option  svelte-10g5ip5" src="/tfjs-test/_app/assets/pizza-18309d1d.jpeg"><img alt="analyze option" class="image-option  svelte-10g5ip5" src="/tfjs-test/_app/assets/food-fa9167d1.jpeg"></div></div>
 
       <div style="margin-top: 0.5em;text-align:right;"><label id="upload-images-button" class="label-button svelte-10g5ip5" for="upload-images">Upload Your Own Image
             <svg id="" class="fa svelte-1cj2gr0" style="height:1em;vertical-align:-.125em;transform-origin:center;overflow:visible" viewBox="0 0 512 512" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg"><g transform="translate(256 256)" transform-origin="128 0"><g transform="translate(0,0) scale(1,1)"><path d="M464 448H48c-26.51 0-48-21.49-48-48V112c0-26.51 21.49-48 48-48h416c26.51 0 48 21.49 48 48v288c0 26.51-21.49 48-48 48zM112 120c-30.928 0-56 25.072-56 56s25.072 56 56 56 56-25.072 56-56-25.072-56-56-56zM64 384h384V272l-87.515-87.515c-4.686-4.686-12.284-4.686-16.971 0L208 320l-55.515-55.515c-4.686-4.686-12.284-4.686-16.971 0L64 336v48z" fill="currentColor" transform="translate(-256 -256)"></path></g></g></svg></label>
@@ -99,7 +99,7 @@
 
 <section><h2>Background</h2>
 
-  <p>I made this website based off the <a href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd" target="_blank" rel="noopener noreferrer">Tensorflow.js COCO-SSD demo</a>. The model is ported into Tensorflow.js and runs <i>completely</i> in your browserInfo with no backend server component, pretty cool!</p>
+  <p>I made this website based off the <a href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd" target="_blank" rel="noopener noreferrer">Tensorflow.js COCO-SSD demo</a>. The model is ported into Tensorflow.js and runs <i>completely</i> in your browser with no backend server component, pretty cool!</p>
 
   <h3>Why does the model [suck in some way]?</h3>
   <p>As with all machine learning models, the model is only as good as the data you give it. This model was trained on the COCO dataset and will not perform as well on images that look different. Hilariously, SSD Lite Mobilenet V2 thinks the food image is a <a href="#carousel">refrigerator</a>.</p>
@@ -123,7 +123,7 @@
   <p>Say what you will about JavaScript; it&#39;s powerful enough to run client-side ML! (Some people even claim that you could do all the training in JS...but I haven&#39;t gotten there yet)</p>
 
   <h3>Advantages of client-side Machine Learning</h3>
-  <p>Running ML models in a browserInfo or even in a React Native mobile app can greatly simplify the application architecture. Instead of building a beefy server that can handle many prediction requests, you can simply cache the model in a Content Delivery Network and make the user&#39;s device do all the work for you!</p>
+  <p>Running ML models in a browser or even in a React Native mobile app can greatly simplify the application architecture. Instead of building a beefy server that can handle many prediction requests, you can simply cache the model in a Content Delivery Network and make the user&#39;s device do all the work for you!</p>
 
   <p>Of course, one of the downsides of client-side ML is that your model is published for everyone to see, not good if you have some secret sauce. Also, extremely large models could eat up network bandwidth and a user&#39;s processing power, and not all client devices have GPU hardware.</p>
 </section></main>
@@ -131,7 +131,7 @@
 <footer class="svelte-1tumlcc"><p>Built using <a href="https://kit.svelte.dev/" target="_blank" rel="noopener noreferrer">Svelte Kit</a> and <a href="https://www.typescriptlang.org/" target="_blank" rel="noopener noreferrer">TypeScript</a></p>
   <p>Based off the <a href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd/demo" target="_blank" rel="noopener noreferrer">Tensorflow.js COCO-SSD demo</a></p>
   <p>Github Repo: <a href="https://github.com/harryli0088/tfjs-test" target="_blank" rel="noopener noreferrer">https://github.com/harryli0088/tfjs-test</a></p>
-  <p>Default Images from the <a href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd/demo" target="_blank" rel="noopener noreferrer">Tensorflow.js COCO-SSD demo</a>, <a href="https://www.americanhumane.org/initiative/adopt-a-cat-month/" target="_blank" rel="noopener noreferrer">American Humane</a>, and <a href="https://www.dreamstime.com/missbobbit_info" target="_blank" rel="noopener noreferrer">Missbobbit</a></p>
+  <p>Default Images from the <a href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd/demo" target="_blank" rel="noopener noreferrer">Tensorflow.js COCO-SSD demo</a>, <a href="https://www.americanhumane.org/initiative/adopt-a-cat-month/" target="_blank" rel="noopener noreferrer">American Humane</a>, <a href="https://www.cntraveler.com/galleries/2014-12-01/10-best-pizzerias-in-italy-rome-naples-venice" target="_blank" rel="noopener noreferrer">Condé Nast Traveler</a>, and <a href="https://www.dreamstime.com/missbobbit_info" target="_blank" rel="noopener noreferrer">Missbobbit</a></p>
   <p>Icons provided by Font Awesome: <a href="https://fontawesome.com/license" target="_blank" rel="noopener noreferrer">https://fontawesome.com/license</a></p>
 </footer>
 
