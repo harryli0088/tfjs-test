@@ -4,7 +4,7 @@
   import '@tensorflow/tfjs-backend-cpu'
   import '@tensorflow/tfjs-backend-webgl'
   import * as cocoSsd from '@tensorflow-models/coco-ssd'
-  import { CLASSES } from '@tensorflow-models/coco-ssd/dist/classes'
+  import { CLASSES } from '@tensorflow-models/coco-ssd/dist/classes.js'
   import Fa from 'svelte-fa'
   import { faGithub } from '@fortawesome/free-brands-svg-icons'
   import { faImage } from '@fortawesome/free-solid-svg-icons'
